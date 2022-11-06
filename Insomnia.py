@@ -40,9 +40,10 @@ class Insomnia(DeadlineEventListener):
 
     def Start(self):
         self.LogInfo("Started")
-        subprocess.check_output("powercfg -s SCHEME_MIN")
+        subprocess.call(["powercfg", "-change", "standby-timeout-ac", "0"])
         self.LogInfo("SET TO MAX SPEED")
 
     def Finished(self):
-        subprocess.check_output("powercfg -s SCHEME_BALANCED")
+        time = self.GetConfigEntryWithDefault("RegularSleepTime", "20")
+        subprocess.call(["powercfg", "-change", "standby-timeout-ac", time])
         self.LogInfo("SET TO BALANCED")
